@@ -15,6 +15,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Just run `ng build -prod && node server.js` 
 
-#Live demo here:
+# Live demo here:
 
 http://e-head.ru:3000/ (admin/admin)

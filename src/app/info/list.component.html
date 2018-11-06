@@ -1,0 +1,55 @@
+﻿<div class="row bg-white sticky-top pt-3 pb-3" [style.top.px]="56">
+    <div class="col-auto">
+        <button class="btn btn-success" [routerLink]="['/info-form']">New</button>
+    </div>
+    <div class="col-auto">
+        <button
+            [ngClass]="{'btn': true, 'btn-primary': filters.accepted, 'btn-secondary': !filters.accepted}"
+            (click)="filters.accepted = !filters.accepted; load();">Show accepted infos</button>
+    </div>
+    <div class="col-auto mr-auto">
+        <div class="dropdown" ngbDropdown>
+            <button [style.width.px]="200" [ngClass]="{'dropdown-toggler btn': true,
+                'btn-secondary': filters.project == '', 'btn-primary': filters.project != ''}"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                {{filters.projectName}}</button>
+                <div class="dropdown-menu bg-transparent" [style.border.px]="0" ngbDropdownMenu>
+                    <button class="btn btn-secondary m-1" [style.width.px]="200" 
+                        (click)="filters.project = ''; filters.projectName = 'ALL PROJECTS'; load()">ALL PROJECTS</button>
+                    <button class="btn btn-primary m-1" [style.width.px]="200" *ngFor="let p of projects" 
+                        (click)="filters.project = p._id; filters.projectName = p.name; load()">{{p.name}}</button>
+                </div>
+        </div>
+    </div>
+    <div class="col-auto">
+        <button [disabled]="loading" (click)="load()" title="Reload list"
+            [ngClass]="{'btn btn-light text-success fa fa-refresh': true, 'fa-spin': loading}"></button>
+    </div>
+</div>
+<div class="content">
+    <div class="card mb-3" *ngFor="let item of items">
+        <div
+            [ngClass]="{'card-header': true, 'alert-warning': item.indefinite}">
+            <div class="row">
+                <div class="col-auto">
+                    <h5>{{item.project?.name || 'ALL PROJECTS'}}</h5>
+                </div>
+                <div class="col-auto ml-auto">
+                    <button class="btn btn-success btn-sm" [hidden]="isAccepted(item.accepted)" 
+                        (click)="accept(item._id)">Accept</button>
+                    <button class="btn btn-primary btn-sm" [hidden]="!isAdmin"
+                        [routerLink]="['/info-form', { id: item._id }]">Edit</button>
+                    <button class="btn btn-danger btn-sm" [hidden]="!isAdmin"
+                        (click)="delete(item._id)">Delete</button>
+                </div>
+                <div class="col-auto">
+                    <i class="fa fa-check-circle fa-lg text-primary align-bottom"
+                        title="{{formatAccepted(item.accepted)}}"></i>
+                    <i class="fa fa-info-circle fa-lg text-primary align-bottom"
+                        title="{{formatInfo(item)}}"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">{{item.text}}</div>
+    </div>
+</div>

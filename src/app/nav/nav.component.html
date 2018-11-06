@@ -1,0 +1,14 @@
+﻿<nav class="navbar navbar-expand navbar-light bg-light sticky-top">
+    <a class="navbar-brand" routerLink=''>Informer</a>
+    <!-- Admin interface section START -->
+    <div class="navbar-nav mr-auto">
+        <a *ngxPermissionsOnly="['ROLE_ADMIN']" class="dropdown-item" routerLink='/users'
+            routerLinkActive="active">Users</a>
+        <a *ngxPermissionsOnly="['ROLE_ADMIN']" class="dropdown-item" routerLink='/projects'
+            routerLinkActive="active">Projects</a>
+    </div>
+    <!-- Admin interface section END -->
+    <div class="navbar-nav">
+        <a class="dropdown-item" routerLink="/login"> Log Out ({{user?.name}}) </a>
+    </div>
+</nav>

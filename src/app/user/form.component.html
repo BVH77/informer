@@ -1,0 +1,59 @@
+﻿<div class="row justify-content-md-center">
+    <div class="col-6">
+        <h2>{{!create ? 'Edit' : 'Create'}} user</h2>
+        <form name="form" (ngSubmit)="f.form.valid && submit()" #f="ngForm" novalidate>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !authority.valid }">
+                <label for="authority">Authority</label>
+                <select class="form-control" [(ngModel)]="model.authority" name="authority"
+                    #authority="ngModel" [disabled]="id == userId" required
+                    [title]="id == userId ? 'You can not change own authority' : 'Choose authority'">
+                    <option value="ROLE_USER" selected>ROLE_USER</option>
+                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                </select>
+                <div *ngIf="f.submitted && !authority.valid" class="help-block text-danger">*
+                    required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !name.valid }">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" [(ngModel)]="model.name"
+                    #name="ngModel" required />
+                <div *ngIf="f.submitted && !name.valid" class="help-block text-danger">*
+                    required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email" [(ngModel)]="model.email"
+                    #email="ngModel" required />
+                <div *ngIf="f.submitted && !email.valid" class="help-block">* required</div>
+            </div>
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                <label for="password">
+                    Password <small *ngIf="!create">(Leave blank to not change)</small>
+                </label>
+                <input type="password" autocomplete="new-password" class="form-control"
+                    name="password" [required]="create" [(ngModel)]="model.password"
+                    #password="ngModel" />
+                <div *ngIf="f.submitted && !password.valid" class="help-block">* required</div>
+            </div>
+            <div class="form-group card">
+                <label class="card-header">Projects</label>
+                <div class="card-body" *ngIf="'ROLE_ADMIN' != model.authority">
+                    <div class="form-check" *ngFor="let project of projectsAll"
+                        title="{{project.desc}}">
+                        <input type="checkbox" class="form-check-input" [name]="project.value"
+                            [(value)]="project.checked" [(ngModel)]="project.checked" />
+                        <label class="form-check-label">{{project.name}}</label>
+                    </div>
+                </div>
+                <div class="card-body" *ngIf="'ROLE_ADMIN' == model.authority">
+                    Admins have access to all projects by default.
+                </div>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">Save</button>
+                <button [routerLink]="['/users']" class="btn btn-link">Cancel</button>
+                <i class="fa fa-refresh fa-spin" [hidden]="!loading"></i>
+            </div>
+        </form>
+    </div>
+</div>

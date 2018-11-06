@@ -1,0 +1,48 @@
+﻿<div class="row mb-3">
+    <div class="col-auto">
+        <h3>Users list</h3>
+    </div>
+    <div class="col-auto mr-auto">
+        <button class="btn btn-success" [routerLink]="['/user-form']">Create</button>
+    </div>
+    <div class="col-auto">
+        <button [disabled]="loading" (click)="load()" title="Reload list"
+            [ngClass]="{'btn btn-light text-success fa fa-refresh': true, 'fa-spin': loading}">
+        </button>
+    </div>
+</div>
+<div class="content table-responsive table-full-width">
+    <table class="table table-sm">
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Authority</th>
+                <th>Projects</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of items">
+                <td>{{item.name}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.authority}}</td>
+                <td *ngIf="'ROLE_ADMIN' != item.authority">
+                    <span *ngFor="let project of item.projects"><abbr 
+                        title="{{project.desc}}">{{project.name}}</abbr>
+                    </span>
+                </td>
+                <td *ngIf="'ROLE_ADMIN' == item.authority">
+                    ALL
+                </td>
+                <td align="right">
+                    <button class="btn btn-primary btn-sm"
+                        [routerLink]="['/user-form', { id: item._id }]">Edit</button>
+                    <button class="btn btn-danger btn-sm" [disabled]="item._id == userId"
+                        [title]="item._id == userId ? 'You can not delete yourself' : 'Delete'"
+                        (click)="delete(item._id, item.name)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
